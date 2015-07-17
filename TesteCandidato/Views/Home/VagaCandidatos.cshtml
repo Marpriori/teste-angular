@@ -1,0 +1,92 @@
+﻿
+@{
+    ViewBag.Title = "Vagas Candidatos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div data-ng-app data-ng-controller="VagaCandidatosController">
+
+    <h2>Candidatos da Vaga: {{vaga.Descricao}} - <span class="label label-success">Qtde. Vagas:{{ vaga.QuantidadeVagas }}</span> </h2>
+    <h3><a href="~/Home/Vaga" class="btn btn-default btn-xs"> < Voltar</a>
+        <span data-ng-hide="addMode">
+            <a data-ng-click="toggleAdd()" href="javascript:;" class="btn btn-primary btn-xs">Incluir</a>
+        </span>
+    </h3>
+    <style>
+        #mydiv {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            background-color: grey;
+            opacity: .8;
+        }
+
+        .ajax-loader {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin-left: -32px; /* -1 * image width / 2 */
+            margin-top: -32px; /* -1 * image height / 2 */
+            display: block;
+        }
+    </style>
+    <div class="container">
+
+        <strong class="label label-danger">{{ error }}</strong>
+        <div id="mydiv" data-ng-show="loading">
+            <img src="~/Images/ajax-loader.gif" class="ajax-loader" />
+        </div>
+
+        <form name="addVagaCandidato" data-ng-show="addMode" class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Inclusão </div>
+                <div class="panel-body form-group">
+                    <div class="row">
+                        <div class="form-group col-xs-12">
+                            <label>Candidato</label>
+                            <select class="form-control" data-ng-model="newvagaCandidato.CandidatoID">
+                                <option ng-repeat="i in candidatos" value="{{i.Id}}">{{i.Nome}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <input type="submit" value="Salvar" data-ng-click="add()" data-ng-disabled="!addVagaCandidato.$valid" class="btn btn-success" />
+                    <input type="button" value="Cancelar" data-ng-click="toggleAdd()" class="btn btn-warning" />
+                </div>
+            </div>
+
+        </form>
+
+        <table class="table table-bordered table-hover table-bordered table-striped col-xs-12 col-md-9 col-lg-6">
+            <tr style="font-weight:bold">
+                <th>#</th>
+                <td>Candidato</td>
+                <td>Pontos</td>
+                <td>Situação</td>
+                <td style="width: 30px;"></td>
+            </tr>
+
+            <tr data-ng-repeat="vagaCandidato in vagaCandidatos">
+                <td class="text-right"><strong>{{ $index+1 }}</strong></td>
+                <td>
+                    <p>{{ vagaCandidato.Candidato.Nome }}</p>
+                    
+                </td>
+                <td>
+                    <p>{{ vagaCandidato.Rank }}</p>
+                </td>
+                <td>
+                    <p ng-class="{'label label-success': $index+1 <= vaga.QuantidadeVagas, 'label label-warning':$index+1 > vaga.QuantidadeVagas}">{{ $index+1 <= vaga.QuantidadeVagas ? "Pré-selecionado": "Lista de espera" }}</p>
+                </td>
+                <td>
+                    <p><a data-ng-click="deletevagaCandidato(vagaCandidato)" href="javascript:;" class="btn btn-danger btn-xs">Apagar</a></p>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+</div>

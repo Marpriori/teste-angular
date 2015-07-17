@@ -1,0 +1,84 @@
+﻿
+@{
+    ViewBag.Title = "Tecnologias";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div data-ng-app data-ng-controller="TecnologiasController">
+
+
+    <h2>Tecnologias <span data-ng-hide="addMode"><a data-ng-click="toggleAdd()" href="javascript:;" class="btn btn-primary btn-xs">Incluir</a></span></h2>
+    <style>
+        #mydiv {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            background-color: grey;
+            opacity: .8;
+        }
+
+        .ajax-loader {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin-left: -32px; /* -1 * image width / 2 */
+            margin-top: -32px; /* -1 * image height / 2 */
+            display: block;
+        }
+    </style>
+    <div class="container">
+
+        <strong class="label label-danger">{{ error }}</strong>
+        <div id="mydiv" data-ng-show="loading">
+            <img src="~/Images/ajax-loader.gif" class="ajax-loader" />
+        </div>
+
+        <form name="addTecnologia" data-ng-show="addMode" class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Inclusão Tecnologia</div>
+                <div class="panel-body form-group">
+                    <div class="row">
+                        <div class="form-group col-xs-12">
+                            <label>Descrição</label>
+                            <input type="text" class="form-control" data-ng-model="newtecnologia.Descricao" required />
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <input type="submit" value="Salvar" data-ng-click="add()" data-ng-disabled="!addTecnologia.$valid" class="btn btn-success" />
+                    <input type="button" value="Cancelar" data-ng-click="toggleAdd()" class="btn btn-warning" />
+                </div>
+            </div>
+
+        </form>
+
+        <table class="table table-bordered table-hover table-bordered table-striped col-xs-12 col-md-9 col-lg-6">
+            <tr>
+                <th>#</th>
+                <td>Descrição</td>
+                <td style="width: 30px;"></td>
+                <td style="width: 30px;"></td>
+            </tr>
+
+            <tr data-ng-repeat="tecnologia in tecnologias">
+                <td class="text-right"><strong data-ng-hide="tecnologia.editMode">{{ tecnologia.Id }}</strong></td>
+                <td>
+                    <p data-ng-hide="tecnologia.editMode">{{ tecnologia.Descricao }}</p>
+                    <input data-ng-show="tecnologia.editMode" class="form-control" type="text" data-ng-model="tecnologia.Descricao" />
+                </td>
+                <td>
+                    <p data-ng-hide="tecnologia.editMode"><a data-ng-click="toggleEdit(tecnologia)" href="javascript:;" class="btn btn-default btn-xs">Editar</a></p>
+                    <p data-ng-show="tecnologia.editMode"><a data-ng-click="save(tecnologia)" href="javascript:;" class="btn btn-success btn-xs">Salvar</a></p>
+                </td>
+                <td>
+                    <p data-ng-hide="tecnologia.editMode"><a data-ng-click="deletetecnologia(tecnologia)" href="javascript:;" class="btn btn-danger btn-xs">Apagar</a></p>
+                    <p data-ng-show="tecnologia.editMode"><a data-ng-click="toggleEdit(tecnologia)" href="javascript:;" class="btn btn-warning btn-xs">Cancelar</a></p>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+</div>

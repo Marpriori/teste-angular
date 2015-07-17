@@ -1,0 +1,98 @@
+﻿
+@{
+    ViewBag.Title = "Candidato Tecnologias";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div data-ng-app data-ng-controller="CandidatoTecnologiasController">
+
+    <h2>Tecnologias do Candidato: {{candidato.Nome}} </h2>
+    <h3><a href="~/Home/Candidato" class="btn btn-default btn-xs"> < Voltar</a>
+        <span data-ng-hide="addMode">
+            <a data-ng-click="toggleAdd()" href="javascript:;" class="btn btn-primary btn-xs">Incluir</a>
+        </span>
+    </h3>
+    <style>
+        #mydiv {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            background-color: grey;
+            opacity: .8;
+        }
+
+        .ajax-loader {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin-left: -32px; /* -1 * image width / 2 */
+            margin-top: -32px; /* -1 * image height / 2 */
+            display: block;
+        }
+    </style>
+    <div class="container">
+
+        <strong class="label label-danger">{{ error }}</strong>
+        <div id="mydiv" data-ng-show="loading">
+            <img src="~/Images/ajax-loader.gif" class="ajax-loader" />
+        </div>
+
+        <form name="addCandidatoTecnologia" data-ng-show="addMode" class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Inclusão </div>
+                <div class="panel-body form-group">
+                    <div class="row">
+                        <div class="form-group col-xs-12">
+                            <label>Tecnologia</label>
+                            <select class="form-control" data-ng-model="newcandidatoTecnologia.TecnologiaID">
+                                <option ng-repeat="i in tecnologias" value="{{i.Id}}">{{i.Descricao}}</option>
+                            </select>
+                            
+                        </div>
+                        <div class="col-xs-6">
+                            <label>Grau Conhecimento</label>
+                            <select class="form-control" data-ng-model="newcandidatoTecnologia.Conhecimento" required >
+                                <option value="1">Baixo</option>
+                                <option value="2">Médio</option>
+                                <option value="3">Alto</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <input type="submit" value="Salvar" data-ng-click="add()" data-ng-disabled="!addCandidatoTecnologia.$valid" class="btn btn-success" />
+                    <input type="button" value="Cancelar" data-ng-click="toggleAdd()" class="btn btn-warning" />
+                </div>
+            </div>
+
+        </form>
+
+        <table class="table table-bordered table-hover table-bordered table-striped col-xs-12 col-md-9 col-lg-6">
+            <tr>
+                <th>#</th>
+                <td>Tecnologia</td>
+                <td>Grau Conhecimento</td>
+                <td style="width: 30px;"></td>
+            </tr>
+
+            <tr data-ng-repeat="candidatoTecnologia in candidatoTecnologias">
+                <td class="text-right"><strong>{{ candidatoTecnologia.Id }}</strong></td>
+                <td>
+                    <p>{{ candidatoTecnologia.Tecnologia.Descricao }}</p>
+                    
+                </td>
+                <td>
+                    <p>{{ candidatoTecnologia.Conhecimento }}</p>
+                    
+                </td>
+                <td>
+                    <p><a data-ng-click="deletecandidatoTecnologia(candidatoTecnologia)" href="javascript:;" class="btn btn-danger btn-xs">Apagar</a></p>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+</div>

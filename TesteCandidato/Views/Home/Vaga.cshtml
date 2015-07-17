@@ -1,0 +1,97 @@
+﻿
+@{
+    ViewBag.Title = "Vagas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div data-ng-app data-ng-controller="VagaController">
+
+
+    <h2>Vagas <span data-ng-hide="addMode"><a data-ng-click="toggleAdd()" href="javascript:;" class="btn btn-primary btn-xs">Incluir</a></span></h2>
+    <style>
+        #mydiv {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            background-color: grey;
+            opacity: .8;
+        }
+
+        .ajax-loader {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin-left: -32px; /* -1 * image width / 2 */
+            margin-top: -32px; /* -1 * image height / 2 */
+            display: block;
+        }
+    </style>
+    <div class="container">
+        
+        <strong class="label label-danger">{{ error }}</strong>
+        <div id="mydiv" data-ng-show="loading">
+            <img src="~/Images/ajax-loader.gif" class="ajax-loader" />
+        </div>
+
+        <form name="addVaga" data-ng-show="addMode" class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Inclusão Vaga</div>
+                <div class="panel-body form-group">
+                    <div class="row">
+                        <div class="form-group col-xs-12">
+                            <label>Descrição</label>
+                            <input type="text" class="form-control" data-ng-model="newvaga.Descricao" required />
+                        </div>
+                        <div class="col-xs-6">
+                            <label>Qtde. Vagas</label>
+                            <input type="number" class="form-control" data-ng-model="newvaga.QuantidadeVagas" required />
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <input type="submit" value="Salvar" data-ng-click="add()" data-ng-disabled="!addVaga.$valid" class="btn btn-success" />
+                    <input type="button" value="Cancelar" data-ng-click="toggleAdd()" class="btn btn-warning" />
+                </div>
+            </div>
+
+        </form>
+
+        <table class="table table-bordered table-hover table-bordered table-striped col-xs-12 col-md-9 col-lg-6">
+            <tr>
+                <th>#</th>
+                <td>Descrição</td>
+                <td>Qtde. Vagas</td>
+                <td></td>
+                <td></td>
+                <td style="width: 30px;"></td>
+                <td style="width: 30px;"></td>
+            </tr>
+
+            <tr data-ng-repeat="vaga in vagas">
+                <td class="text-right"><strong data-ng-hide="vaga.editMode">{{ vaga.Id }}</strong></td>
+                <td>
+                    <p data-ng-hide="vaga.editMode">{{ vaga.Descricao }}</p>
+                    <input data-ng-show="vaga.editMode" class="form-control" type="text" data-ng-model="vaga.Descricao" />
+                </td>
+                <td>
+                    <p data-ng-hide="vaga.editMode">{{ vaga.QuantidadeVagas }}</p>
+                    <input data-ng-show="vaga.editMode" class="form-control" type="number" data-ng-model="vaga.QuantidadeVagas" />
+                </td>
+                <td><a href="~/Home/VagaTecnologias/{{ vaga.Id }}">Tecnologias</a></td>
+                <td><a href="~/Home/VagaCandidatos/{{ vaga.Id }}">Candidatos</a></td>
+                <td>
+                    <p data-ng-hide="vaga.editMode"><a data-ng-click="toggleEdit(vaga)" href="javascript:;" class="btn btn-default btn-xs">Editar</a></p>
+                    <p data-ng-show="vaga.editMode"><a data-ng-click="save(vaga)" href="javascript:;" class="btn btn-success btn-xs">Salvar</a></p>
+                </td>
+                <td>
+                    <p data-ng-hide="vaga.editMode"><a data-ng-click="deletevaga(vaga)" href="javascript:;" class="btn btn-danger btn-xs">Apagar</a></p>
+                    <p data-ng-show="vaga.editMode"><a data-ng-click="toggleEdit(vaga)" href="javascript:;" class="btn btn-warning btn-xs">Cancelar</a></p>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+</div>
